@@ -3,8 +3,8 @@
 
 # Linear Algebra Calculator Web Application
 
-![Light and Dark Mode Screenshots](https://i.imgur.com/sample-image.png)  
-*Example of the application in both light and dark modes*
+![alt text](image.png)
+![alt text](image-1.png)
 
 ## Table of Contents
 - [Project Overview](#project-overview)
