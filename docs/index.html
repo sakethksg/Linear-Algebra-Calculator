@@ -1,0 +1,2096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Algebra Calculator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+    :root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --primary-dark: #3f37c9;
+    --secondary: #4cc9f0;
+    --accent: #f72585;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --success: #06d6a0;
+    --danger: #ef476f;
+    --warning: #ffd166;
+    --info: #118ab2;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --transition-speed: 0.3s;
+    --card-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    --border-radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--gray-800);
+    background-color: #f5f7fa;
+    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+    font-size: 2.5rem;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 2px;
+}
+
+.subtitle {
+    color: var(--gray-600);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+.tab-container {
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.tab {
+    background-color: var(--gray-100);
+    border: none;
+    padding: 0.85rem 1.8rem;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all var(--transition-speed);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.tab:hover::before {
+    transform: translateX(100%);
+}
+
+.tab:hover {
+    background-color: var(--gray-200);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.tab.active {
+    background: linear-gradient(120deg, var(--primary), var(--primary-dark));
+    color: white;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+}
+
+.tab-content {
+    display: none;
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    transition: all var(--transition-speed);
+    animation: fadeUp 0.5s ease-out;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.operation-container {
+    margin-bottom: 2.5rem;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-dark);
+    font-weight: 700;
+    position: relative;
+    padding-left: 15px;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    height: 70%;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    border-radius: 2px;
+}
+
+.input-group {
+    margin-bottom: 2rem;
+    position: relative;
+    transition: all var(--transition-speed);
+}
+
+.input-group:hover {
+    transform: translateY(-2px);
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+}
+
+.matrix-input, .vector-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--gray-300);
+    border-radius: var(--border-radius);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    resize: vertical;
+    transition: all var(--transition-speed);
+    font-size: 1rem;
+    background-color: var(--gray-100);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.matrix-input {
+    height: 150px;
+}
+
+.matrix-input:focus, .vector-input:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.15);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: none;
+    padding: 0.9rem 1.8rem;
+    font-size: 1rem;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    gap: 8px;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.8s;
+}
+
+.btn:active::after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+}
+
+.btn-primary {
+    color: white;
+    background: linear-gradient(120deg, var(--primary), var(--primary-dark));
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(67, 97, 238, 0.35);
+}
+
+.btn-secondary {
+    color: var(--gray-700);
+    background-color: var(--gray-200);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.btn-secondary:hover {
+    background-color: var(--gray-300);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    stroke-width: 2.5;
+    stroke: currentColor;
+}
+
+.btn-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.result-container {
+    margin-top: 2.5rem;
+    padding: 2rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+    border-left: 5px solid var(--primary);
+    transition: all var(--transition-speed);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.result-container:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+.result-container.error {
+    border-left: 5px solid var(--danger);
+}
+
+.result-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.result-title::before {
+    content: "✓";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+.result-container.error .result-title::before {
+    content: "!";
+    background-color: var(--danger);
+}
+
+.result-content {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.error-text {
+    color: var(--danger);
+    font-weight: 500;
+}
+
+.input-hint {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.input-hint svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--gray-500);
+}
+
+.matrix-preview {
+    margin-top: 1.5rem;
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.matrix-table {
+    border-collapse: separate;
+    border-spacing: 3px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.matrix-table td {
+    padding: 0.75rem;
+    background-color: var(--gray-100);
+    text-align: center;
+    min-width: 60px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.matrix-table td:hover {
+    background-color: var(--gray-200);
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(67, 97, 238, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background-color: var(--gray-500);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 1;
+    font-size: 12px;
+    margin-left: 8px;
+    cursor: help;
+    transition: all var(--transition-speed);
+}
+
+.help-icon:hover {
+    background-color: var(--primary);
+    transform: scale(1.1);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 250px;
+    background-color: var(--gray-800);
+    color: white;
+    text-align: left;
+    border-radius: 8px;
+    padding: 12px;
+    position: absolute;
+    z-index: 100;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -125px;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transform: translateY(10px);
+    pointer-events: none;
+    line-height: 1.5;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -8px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: var(--gray-800) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.example-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 8px;
+    transition: color var(--transition-speed);
+}
+
+.example-btn:hover {
+    color: var(--primary-dark);
+}
+
+.input-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.input-col {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Feature card design */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.feature-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--card-shadow);
+    transition: all var(--transition-speed);
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--gray-100);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.feature-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--primary);
+}
+
+.feature-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+}
+
+.feature-text {
+    color: var(--gray-600);
+    font-size: 0.95rem;
+}
+
+/* Custom styling for the SVD result display */
+.svd-result {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.svd-matrix {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.svd-label {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--gray-700);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+.svd-label::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    margin-right: 8px;
+}
+
+/* Eigen section styling */
+.eigen-result {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.eigen-pair {
+    display: flex;
+    margin-bottom: 0.75rem;
+    align-items: flex-start;
+    padding: 0.75rem;
+    background-color: var(--gray-100);
+    border-radius: 8px;
+    transition: all var(--transition-speed);
+}
+
+.eigen-pair:hover {
+    background-color: var(--gray-200);
+}
+
+.eigen-value {
+    width: 180px;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+/* System solutions styling */
+.system-solution {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.solution-variable {
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+footer {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    text-align: center;
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.footer-link {
+    color: var(--gray-600);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+.footer-link:hover {
+    color: var(--primary);
+}
+
+/* Dark mode toggle */
+.theme-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    z-index: 100;
+    transition: all var(--transition-speed);
+}
+
+.theme-toggle:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    color: var(--gray-700);
+    transition: transform 0.5s;
+}
+
+.theme-toggle:hover svg {
+    transform: rotate(45deg);
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #121212;
+    background-image: linear-gradient(120deg, #121212 0%, #1e1e1e 100%);
+    color: #e0e0e0;
+}
+
+body.dark-mode .tab-content {
+    background-color: #1e1e1e;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+}
+
+body.dark-mode .tab {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+body.dark-mode .tab:hover {
+    background-color: #3d3d3d;
+}
+
+body.dark-mode .tab.active {
+    background: linear-gradient(120deg, var(--primary), var(--primary-dark));
+}
+
+body.dark-mode .matrix-input,
+body.dark-mode .vector-input {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .result-container {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .result-content {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .result-title,
+body.dark-mode .input-label,
+body.dark-mode .section-title {
+    color: #e0e0e0;
+}
+
+body.dark-mode h1 {
+    color: var(--primary-light);
+}
+
+body.dark-mode .matrix-table td {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .matrix-table td:hover {
+    background-color: #3d3d3d;
+}
+
+body.dark-mode .theme-toggle {
+    background-color: #2d2d2d;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .theme-toggle svg {
+    color: #e0e0e0;
+}
+
+body.dark-mode .feature-card {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .feature-icon {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .feature-title {
+    color: #e0e0e0;
+}
+
+body.dark-mode .svd-matrix,
+body.dark-mode .system-solution,
+body.dark-mode .matrix-preview {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .eigen-pair {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .eigen-pair:hover {
+    background-color: #3d3d3d;
+}
+
+/* New Elements: Notification and tooltip badges */
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--accent);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(247, 37, 133, 0.3);
+}
+
+/* Card with frosted glass effect */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+}
+
+body.dark-mode .glass-card {
+    background: rgba(30, 30, 30, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-400);
+    border-radius: 10px;
+    border: 3px solid var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-500);
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #555;
+    border: 3px solid #2d2d2d;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .input-row {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .tab {
+        padding: 0.75rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .tab-content {
+        padding: 1.5rem;
+    }
+    
+    .features {
+        grid-template-columns: 1fr;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* Animations for engaging UX */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.float-animation {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Font imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+    
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Linear Algebra Calculator</h1>
+            <p class="subtitle">Perform advanced matrix and vector operations with ease</p>
+        </header>
+
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="matrix-ops">Matrix Operations</button>
+                <button class="tab" data-tab="matrix-properties">Matrix Properties</button>
+                <button class="tab" data-tab="vector-ops">Vector Operations</button>
+                <button class="tab" data-tab="systems">Linear Systems</button>
+                <button class="tab" data-tab="eigen">Eigenvalues & Decomposition</button>
+            </div>
+
+            <!-- Matrix Operations Tab -->
+            <div class="tab-content active" id="matrix-ops">
+                <div class="operation-container">
+                    <h2>Matrix Addition</h2>
+                    <div class="input-row">
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Matrix A 
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltiptext">Enter matrix rows separated by semicolons (;) and values separated by spaces</span>
+                                    </span>
+                                </label>
+                                <textarea class="matrix-input" id="add-matrix-a" placeholder="e.g., 1 2 3; 4 5 6; 7 8 9"></textarea>
+                                <p class="input-hint">Example: 1 2 3; 4 5 6; 7 8 9</p>
+                                <button class="example-btn" onclick="fillExampleMatrix('add-matrix-a')">Fill with example</button>
+                            </div>
+                        </div>
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">Matrix B</label>
+                                <textarea class="matrix-input" id="add-matrix-b" placeholder="e.g., 9 8 7; 6 5 4; 3 2 1"></textarea>
+                                <p class="input-hint">Example: 9 8 7; 6 5 4; 3 2 1</p>
+                                <button class="example-btn" onclick="fillExampleMatrix('add-matrix-b')">Fill with example</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateMatrixOperation('add')">Calculate Addition</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('add')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="add-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="add-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="add-result-content"></div>
+                        <div class="matrix-preview" id="add-matrix-preview"></div>
+                    </div>
+                </div>
+
+                <div class="operation-container">
+                    <h2>Matrix Multiplication</h2>
+                    <div class="input-row">
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">Matrix A</label>
+                                <textarea class="matrix-input" id="mult-matrix-a" placeholder="e.g., 1 2; 3 4"></textarea>
+                                <p class="input-hint">Example: 1 2; 3 4</p>
+                                <button class="example-btn" onclick="fillExampleMatrix('mult-matrix-a', '1 2; 3 4')">Fill with example</button>
+                            </div>
+                        </div>
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">Matrix B</label>
+                                <textarea class="matrix-input" id="mult-matrix-b" placeholder="e.g., 5 6; 7 8"></textarea>
+                                <p class="input-hint">Example: 5 6; 7 8</p>
+                                <button class="example-btn" onclick="fillExampleMatrix('mult-matrix-b', '5 6; 7 8')">Fill with example</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateMatrixOperation('multiply')">Calculate Multiplication</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('mult')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="multiply-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="multiply-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="multiply-result-content"></div>
+                        <div class="matrix-preview" id="multiply-matrix-preview"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matrix Properties Tab -->
+            <div class="tab-content" id="matrix-properties">
+                <div class="operation-container">
+                    <h2>Matrix Determinant</h2>
+                    <div class="input-group">
+                        <label class="input-label">Matrix</label>
+                        <textarea class="matrix-input" id="det-matrix" placeholder="e.g., 1 2; 3 4"></textarea>
+                        <p class="input-hint">Example: 1 2; 3 4</p>
+                        <button class="example-btn" onclick="fillExampleMatrix('det-matrix', '1 2; 3 4')">Fill with example</button>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateMatrixProperty('determinant')">Calculate Determinant</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('det')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="determinant-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="determinant-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="determinant-result-content"></div>
+                    </div>
+                </div>
+
+                <div class="operation-container">
+                    <h2>Matrix Inverse</h2>
+                    <div class="input-group">
+                        <label class="input-label">Matrix</label>
+                        <textarea class="matrix-input" id="inv-matrix" placeholder="e.g., 1 0 0; 0 1 0; 0 0 1"></textarea>
+                        <p class="input-hint">Example: 1 0 0; 0 1 0; 0 0 1</p>
+                        <button class="example-btn" onclick="fillExampleMatrix('inv-matrix', '1 0 0; 0 1 0; 0 0 1')">Fill with example</button>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateMatrixProperty('inverse')">Calculate Inverse</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('inv')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="inverse-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="inverse-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="inverse-result-content"></div>
+                        <div class="matrix-preview" id="inverse-matrix-preview"></div>
+                    </div>
+                </div>
+
+                <div class="operation-container">
+                    <h2>Matrix Transpose</h2>
+                    <div class="input-group">
+                        <label class="input-label">Matrix</label>
+                        <textarea class="matrix-input" id="transpose-matrix" placeholder="e.g., 1 2 3; 4 5 6"></textarea>
+                        <p class="input-hint">Example: 1 2 3; 4 5 6</p>
+                        <button class="example-btn" onclick="fillExampleMatrix('transpose-matrix', '1 2 3; 4 5 6')">Fill with example</button>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateMatrixProperty('transpose')">Calculate Transpose</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('transpose')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="transpose-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="transpose-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="transpose-result-content"></div>
+                        <div class="matrix-preview" id="transpose-matrix-preview"></div>
+                    </div>
+                </div>
+
+                <div class="operation-container">
+                    <h2>Matrix Rank</h2>
+                    <div class="input-group">
+                        <label class="input-label">Matrix</label>
+                        <textarea class="matrix-input" id="rank-matrix" placeholder="e.g., 1 2 1; 3 6 3; 2 4 2"></textarea>
+                        <p class="input-hint">Example: 1 2 1; 3 6 3; 2 4 2</p>
+                        <button class="example-btn" onclick="fillExampleMatrix('rank-matrix', '1 2 1; 3 6 3; 2 4 2')">Fill with example</button>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateMatrixProperty('rank')">Calculate Rank</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('rank')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="rank-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="rank-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="rank-result-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vector Operations Tab -->
+            <div class="tab-content" id="vector-ops">
+                <div class="operation-container">
+                    <h2>Vector Dot Product</h2>
+                    <div class="input-row">
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Vector A
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltiptext">Enter vector values separated by spaces</span>
+                                    </span>
+                                </label>
+                                <input type="text" class="vector-input" id="dot-vector-a" placeholder="e.g., 1 2 3">
+                                <p class="input-hint">Example: 1 2 3</p>
+                                <button class="example-btn" onclick="fillExampleVector('dot-vector-a', '1 2 3')">Fill with example</button>
+                            </div>
+                        </div>
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">Vector B</label>
+                                <input type="text" class="vector-input" id="dot-vector-b" placeholder="e.g., 4 5 6">
+                                <p class="input-hint">Example: 4 5 6</p>
+                                <button class="example-btn" onclick="fillExampleVector('dot-vector-b', '4 5 6')">Fill with example</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateVectorOperation('dot')">Calculate Dot Product</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('dot')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="dot-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="dot-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="dot-result-content"></div>
+                    </div>
+                </div>
+
+                <div class="operation-container">
+                    <h2>Vector Cross Product</h2>
+                    <div class="input-row">
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Vector A
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltiptext">Enter exactly 3 values separated by spaces</span>
+                                    </span>
+                                </label>
+                                <input type="text" class="vector-input" id="cross-vector-a" placeholder="e.g., 1 0 0">
+                                <p class="input-hint">Example: 1 0 0 (must be 3D vectors)</p>
+                                <button class="example-btn" onclick="fillExampleVector('cross-vector-a', '1 0 0')">Fill with example</button>
+                            </div>
+                        </div>
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">Vector B</label>
+                                <input type="text" class="vector-input" id="cross-vector-b" placeholder="e.g., 0 1 0">
+                                <p class="input-hint">Example: 0 1 0 (must be 3D vectors)</p>
+                                <button class="example-btn" onclick="fillExampleVector('cross-vector-b', '0 1 0')">Fill with example</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateVectorOperation('cross')">Calculate Cross Product</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('cross')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="cross-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="cross-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="cross-result-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Linear Systems Tab -->
+            <div class="tab-content" id="systems">
+                <div class="operation-container">
+                    <h2>Solve Linear System</h2>
+                    <p>For a system of equations Ax = b</p>
+                    
+                    <div class="input-row">
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Coefficient Matrix A
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltiptext">Each row represents one equation's coefficients</span>
+                                    </span>
+                                </label>
+                                <textarea class="matrix-input" id="system-coefficients" placeholder="e.g., 2 1 -1; -3 -1 2; -2 1 2"></textarea>
+                                <p class="input-hint">Example: 2 1 -1; -3 -1 2; -2 1 2</p>
+                                <button class="example-btn" onclick="fillExampleMatrix('system-coefficients', '2 1 -1; -3 -1 2; -2 1 2')">Fill with example</button>
+                            </div>
+                        </div>
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Constants Vector b
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltiptext">Each value represents one equation's right-hand side</span>
+                                    </span>
+                                </label>
+                                <input type="text" class="vector-input" id="system-constants" placeholder="e.g., 8 -11 -3">
+                                <p class="input-hint">Example: 8 -11 -3</p>
+                                <button class="example-btn" onclick="fillExampleVector('system-constants', '8 -11 -3')">Fill with example</button>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="solveLinearSystem()">Solve System</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('system')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="system-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="system-result" style="display:none;">
+                        <h3 class="result-title">Solution:</h3>
+                        <div class="result-content" id="system-result-content"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="eigen">
+                <div class="operation-container">
+                    <h2>Eigenvalues and Eigenvectors</h2>
+                    <div class="input-group">
+                        <label class="input-label">
+                            Matrix
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Enter a square matrix</span>
+                            </span>
+                        </label>
+                        <textarea class="matrix-input" id="eigen-matrix" placeholder="e.g., 4 -2; 1 1"></textarea>
+                        <p class="input-hint">Example: 4 -2; 1 1</p>
+                        <button class="example-btn" onclick="fillExampleMatrix('eigen-matrix', '4 -2; 1 1')">Fill with example</button>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateEigen('eigen')">Calculate Eigenvalues & Eigenvectors</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('eigen')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="eigen-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="eigen-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="eigen-result-content"></div>
+                    </div>
+                </div>
+
+                <div class="operation-container">
+                    <h2>Matrix Decomposition</h2>
+                    <div class="input-row">
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    Matrix
+                                    <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltiptext">Enter a matrix for decomposition</span>
+                                    </span>
+                                </label>
+                                <textarea class="matrix-input" id="decomp-matrix" placeholder="e.g., 4 0; 3 -5"></textarea>
+                                <p class="input-hint">Example: 4 0; 3 -5</p>
+                                <button class="example-btn" onclick="fillExampleMatrix('decomp-matrix', '4 0; 3 -5')">Fill with example</button>
+                            </div>
+                        </div>
+                        <div class="input-col">
+                            <div class="input-group">
+                                <label class="input-label">Decomposition Type</label>
+                                <select id="decomp-type" class="decomp-select">
+                                    <option value="lu">LU Decomposition</option>
+                                    <option value="qr">QR Decomposition</option>
+                                    <option value="svd">Singular Value Decomposition (SVD)</option>
+                                    <option value="cholesky">Cholesky Decomposition</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateDecomposition()">Calculate Decomposition</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('decomp')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="decomp-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="decomp-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="decomp-result-content"></div>
+                    </div>
+                </div>
+
+                <div class="operation-container">
+                    <h2>Characteristic Polynomial</h2>
+                    <div class="input-group">
+                        <label class="input-label">
+                            Matrix
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Enter a square matrix</span>
+                            </span>
+                        </label>
+                        <textarea class="matrix-input" id="char-poly-matrix" placeholder="e.g., 2 -1; 1 0"></textarea>
+                        <p class="input-hint">Example: 2 -1; 1 0</p>
+                        <button class="example-btn" onclick="fillExampleMatrix('char-poly-matrix', '2 -1; 1 0')">Fill with example</button>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="calculateCharPoly()">Calculate Polynomial</button>
+                        <button class="btn btn-secondary" onclick="clearInputs('char-poly')">Clear</button>
+                    </div>
+
+                    <div class="loading" id="char-poly-loading">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div class="result-container" id="char-poly-result" style="display:none;">
+                        <h3 class="result-title">Result:</h3>
+                        <div class="result-content" id="char-poly-result-content"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="theme-toggle" onclick="toggleDarkMode()">
+                <i id="theme-icon" class="fas fa-moon"></i>
+            </div>
+
+
+            <script>
+                // Handle tab switching
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Remove active class from all tabs and content
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        
+                        // Add active class to clicked tab and corresponding content
+                        tab.classList.add('active');
+                        document.getElementById(tab.dataset.tab).classList.add('active');
+                    });
+                });
+            
+                // Function to fill example matrices
+                function fillExampleMatrix(elementId, example = '1 2 3; 4 5 6; 7 8 9') {
+                    document.getElementById(elementId).value = example;
+                }
+            
+                // Function to fill example vectors
+                function fillExampleVector(elementId, example = '1 2 3') {
+                    document.getElementById(elementId).value = example;
+                }
+            
+                // Function to clear inputs
+                function clearInputs(prefix) {
+                    const inputIds = {
+                        'add': ['add-matrix-a', 'add-matrix-b'],
+                        'mult': ['mult-matrix-a', 'mult-matrix-b'],
+                        'det': ['det-matrix'],
+                        'inv': ['inv-matrix'],
+                        'transpose': ['transpose-matrix'],
+                        'rank': ['rank-matrix'],
+                        'dot': ['dot-vector-a', 'dot-vector-b'],
+                        'cross': ['cross-vector-a', 'cross-vector-b'],
+                        'system': ['system-coefficients', 'system-constants']
+                    };
+                    
+                    (inputIds[prefix] || []).forEach(id => {
+                        document.getElementById(id).value = '';
+                    });
+                    
+                    // Hide result containers
+                    const resultContainerId = prefix === 'add' ? 'add-result' : 
+                                          prefix === 'mult' ? 'multiply-result' : 
+                                          `${prefix}-result`;
+                    
+                    const resultContainer = document.getElementById(resultContainerId);
+                    if (resultContainer) {
+                        resultContainer.style.display = 'none';
+                    }
+                }
+            
+                // Create a matrix table from a 2D array
+                function createMatrixTable(matrix) {
+                    let table = document.createElement('table');
+                    table.className = 'matrix-table';
+                    
+                    for (let i = 0; i < matrix.length; i++) {
+                        let row = table.insertRow();
+                        for (let j = 0; j < matrix[i].length; j++) {
+                            let cell = row.insertCell();
+                            cell.textContent = typeof matrix[i][j] === 'number' ? 
+                                matrix[i][j].toFixed(4).replace(/\.?0+$/, '') : matrix[i][j];
+                        }
+                    }
+                    
+                    return table;
+                }
+            
+                // Function to calculate matrix operations (add, multiply)
+                function calculateMatrixOperation(operation) {
+                    let url, matrixA, matrixB, loadingElement, resultContainer, resultContent, matrixPreview;
+                    
+                    if (operation === 'add') {
+                        url = '/api/matrix/add';
+                        matrixA = document.getElementById('add-matrix-a').value;
+                        matrixB = document.getElementById('add-matrix-b').value;
+                        loadingElement = document.getElementById('add-loading');
+                        resultContainer = document.getElementById('add-result');
+                        resultContent = document.getElementById('add-result-content');
+                        matrixPreview = document.getElementById('add-matrix-preview');
+                    } else if (operation === 'multiply') {
+                        url = '/api/matrix/multiply';
+                        matrixA = document.getElementById('mult-matrix-a').value;
+                        matrixB = document.getElementById('mult-matrix-b').value;
+                        loadingElement = document.getElementById('multiply-loading');
+                        resultContainer = document.getElementById('multiply-result');
+                        resultContent = document.getElementById('multiply-result-content');
+                        matrixPreview = document.getElementById('multiply-matrix-preview');
+                    }
+                    
+                    if (!matrixA || !matrixB) {
+                        alert('Please enter both matrices');
+                        return;
+                    }
+                    
+                    // Show loading
+                    loadingElement.style.display = 'block';
+                    
+                    // Make API request
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            matrixAText: matrixA,
+                            matrixBText: matrixB
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show result
+                        resultContainer.style.display = 'block';
+                        
+                        if (data.error) {
+                            resultContent.innerHTML = `<p class="error-text">${data.error}</p>`;
+                            matrixPreview.innerHTML = '';
+                        } else {
+                            resultContent.textContent = JSON.stringify(data.result);
+                            matrixPreview.innerHTML = '';
+                            matrixPreview.appendChild(createMatrixTable(data.result));
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show error
+                        resultContainer.style.display = 'block';
+                        resultContent.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
+                        matrixPreview.innerHTML = '';
+                    });
+                }
+            
+                // Function to calculate matrix properties (determinant, inverse, transpose, rank)
+                function calculateMatrixProperty(property) {
+                    let url, matrix, loadingElement, resultContainer, resultContent, matrixPreview;
+                    
+                    switch (property) {
+                        case 'determinant':
+                            url = '/api/matrix/determinant';
+                            matrix = document.getElementById('det-matrix').value;
+                            loadingElement = document.getElementById('determinant-loading');
+                            resultContainer = document.getElementById('determinant-result');
+                            resultContent = document.getElementById('determinant-result-content');
+                            break;
+                        case 'inverse':
+                            url = '/api/matrix/inverse';
+                            matrix = document.getElementById('inv-matrix').value;
+                            loadingElement = document.getElementById('inverse-loading');
+                            resultContainer = document.getElementById('inverse-result');
+                            resultContent = document.getElementById('inverse-result-content');
+                            matrixPreview = document.getElementById('inverse-matrix-preview');
+                            break;
+                        case 'transpose':
+                            url = '/api/matrix/transpose';
+                            matrix = document.getElementById('transpose-matrix').value;
+                            loadingElement = document.getElementById('transpose-loading');
+                            resultContainer = document.getElementById('transpose-result');
+                            resultContent = document.getElementById('transpose-result-content');
+                            matrixPreview = document.getElementById('transpose-matrix-preview');
+                            break;
+                        case 'rank':
+                            url = '/api/matrix/rank';
+                            matrix = document.getElementById('rank-matrix').value;
+                            loadingElement = document.getElementById('rank-loading');
+                            resultContainer = document.getElementById('rank-result');
+                            resultContent = document.getElementById('rank-result-content');
+                            break;
+                    }
+                    
+                    if (!matrix) {
+                        alert('Please enter a matrix');
+                        return;
+                    }
+                    
+                    // Show loading
+                    loadingElement.style.display = 'block';
+                    
+                    // Make API request
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            matrixText: matrix
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show result
+                        resultContainer.style.display = 'block';
+                        
+                        if (data.error) {
+                            resultContent.innerHTML = `<p class="error-text">${data.error}</p>`;
+                            if (matrixPreview) matrixPreview.innerHTML = '';
+                        } else {
+                            if (property === 'determinant' || property === 'rank') {
+                                resultContent.textContent = data.result;
+                            } else {
+                                resultContent.textContent = JSON.stringify(data.result);
+                                if (matrixPreview) {
+                                    matrixPreview.innerHTML = '';
+                                    matrixPreview.appendChild(createMatrixTable(data.result));
+                                }
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show error
+                        resultContainer.style.display = 'block';
+                        resultContent.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
+                        if (matrixPreview) matrixPreview.innerHTML = '';
+                    });
+                }
+            
+                // Function to calculate vector operations (dot, cross)
+                function calculateVectorOperation(operation) {
+                    let url, vectorA, vectorB, loadingElement, resultContainer, resultContent;
+                    
+                    if (operation === 'dot') {
+                        url = '/api/vector/dot';
+                        vectorA = document.getElementById('dot-vector-a').value;
+                        vectorB = document.getElementById('dot-vector-b').value;
+                        loadingElement = document.getElementById('dot-loading');
+                        resultContainer = document.getElementById('dot-result');
+                        resultContent = document.getElementById('dot-result-content');
+                    } else if (operation === 'cross') {
+                        url = '/api/vector/cross';
+                        vectorA = document.getElementById('cross-vector-a').value;
+                        vectorB = document.getElementById('cross-vector-b').value;
+                        loadingElement = document.getElementById('cross-loading');
+                        resultContainer = document.getElementById('cross-result');
+                        resultContent = document.getElementById('cross-result-content');
+                    }
+                    
+                    if (!vectorA || !vectorB) {
+                        alert('Please enter both vectors');
+                        return;
+                    }
+                    
+                    // Show loading
+                    loadingElement.style.display = 'block';
+                    
+                    // Make API request
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            vectorAText: vectorA,
+                            vectorBText: vectorB
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show result
+                        resultContainer.style.display = 'block';
+                        
+                        if (data.error) {
+                            resultContent.innerHTML = `<p class="error-text">${data.error}</p>`;
+                        } else {
+                            if (operation === 'dot') {
+                                resultContent.textContent = data.result;
+                            } else {
+                                resultContent.textContent = JSON.stringify(data.result);
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show error
+                        resultContainer.style.display = 'block';
+                        resultContent.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
+                    });
+                }
+            
+                // Function to solve linear system
+                function solveLinearSystem() {
+                    const coefficients = document.getElementById('system-coefficients').value;
+                    const constants = document.getElementById('system-constants').value;
+                    const loadingElement = document.getElementById('system-loading');
+                    const resultContainer = document.getElementById('system-result');
+                    const resultContent = document.getElementById('system-result-content');
+                    
+                    if (!coefficients || !constants) {
+                        alert('Please enter both coefficient matrix and constants vector');
+                        return;
+                    }
+                    
+                    // Show loading
+                    loadingElement.style.display = 'block';
+                    
+                    // Make API request
+                    fetch('/api/system/solve', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            coefficientsText: coefficients,
+                            constantsText: constants
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show result
+                        resultContainer.style.display = 'block';
+                        
+                        if (data.error) {
+                            resultContent.innerHTML = `<p class="error-text">${data.error}</p>`;
+                        } else {
+                            let resultHTML = '';
+                            
+                            if (data.unique === false && typeof data.solution === 'string') {
+                                resultHTML = `<p>${data.solution}</p>`;
+                                if (data.message) {
+                                    resultHTML += `<p><em>${data.message}</em></p>`;
+                                }
+                            } else {
+                                resultHTML = '<div class="system-solution">';
+                                if (data.message) {
+                                    resultHTML += `<p><em>${data.message}</em></p>`;
+                                }
+                                if (data.solution) {
+                                    resultHTML += '<p>Solution:</p>';
+                                    for (let i = 0; i < data.solution.length; i++) {
+                                        resultHTML += `<p><span class="solution-variable">x<sub>${i+1}</sub></span> = ${typeof data.solution[i] === 'number' ? data.solution[i].toFixed(4).replace(/\.?0+$/, '') : data.solution[i]}</p>`;
+                                    }
+                                }
+                                if (data.residuals !== undefined) {
+                                    resultHTML += `<p>Sum of squared residuals: ${data.residuals.toFixed(6)}</p>`;
+                                }
+                                resultHTML += '</div>';
+                            }
+                            
+                            resultContent.innerHTML = resultHTML;
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show error
+                        resultContainer.style.display = 'block';
+                        resultContent.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
+                    });
+                }
+                function calculateEigen() {
+                    const matrix = document.getElementById('eigen-matrix').value;
+                    const loadingElement = document.getElementById('eigen-loading');
+                    const resultContainer = document.getElementById('eigen-result');
+                    const resultContent = document.getElementById('eigen-result-content');
+                    
+                    if (!matrix) {
+                        alert('Please enter a matrix');
+                        return;
+                    }
+                    
+                    // Show loading
+                    loadingElement.style.display = 'block';
+                    
+                    // Make API request
+                    fetch('/api/matrix/eigen', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            matrixText: matrix
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show result
+                        resultContainer.style.display = 'block';
+                        
+                        if (data.error) {
+                            resultContent.innerHTML = `<p class="error-text">${data.error}</p>`;
+                        } else {
+                            let resultHTML = '<div class="eigen-result">';
+                            
+                            // Display eigenvalues
+                            resultHTML += '<h4>Eigenvalues:</h4>';
+                            resultHTML += '<div class="eigen-values">';
+                            data.eigenvalues.forEach((eigenvalue, index) => {
+                                resultHTML += `<p>λ<sub>${index+1}</sub> = ${
+                                    typeof eigenvalue === 'object' ? 
+                                    `${eigenvalue.re.toFixed(4).replace(/\.?0+$/, '')} ${eigenvalue.im >= 0 ? '+' : ''}${eigenvalue.im.toFixed(4).replace(/\.?0+$/, '')}i` : 
+                                    eigenvalue.toFixed(4).replace(/\.?0+$/, '')
+                                }</p>`;
+                            });
+                            resultHTML += '</div>';
+                            
+                            // Display eigenvectors
+                            resultHTML += '<h4>Eigenvectors:</h4>';
+                            resultHTML += '<div class="eigen-vectors">';
+                            data.eigenvectors.forEach((eigenvector, index) => {
+                                resultHTML += `<p>For λ<sub>${index+1}</sub>: [${
+                                    eigenvector.map(val => 
+                                        typeof val === 'object' ? 
+                                        `${val.re.toFixed(4).replace(/\.?0+$/, '')} ${val.im >= 0 ? '+' : ''}${val.im.toFixed(4).replace(/\.?0+$/, '')}i` : 
+                                        val.toFixed(4).replace(/\.?0+$/, '')
+                                    ).join(', ')
+                                }]</p>`;
+                            });
+                            resultHTML += '</div>';
+                            
+                            resultHTML += '</div>';
+                            resultContent.innerHTML = resultHTML;
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show error
+                        resultContainer.style.display = 'block';
+                        resultContent.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
+                    });
+                }
+                
+                // Function to calculate matrix decomposition
+                function calculateDecomposition() {
+                    const matrix = document.getElementById('decomp-matrix').value;
+                    const decompType = document.getElementById('decomp-type').value;
+                    const loadingElement = document.getElementById('decomp-loading');
+                    const resultContainer = document.getElementById('decomp-result');
+                    const resultContent = document.getElementById('decomp-result-content');
+                    
+                    if (!matrix) {
+                        alert('Please enter a matrix');
+                        return;
+                    }
+                    
+                    // Show loading
+                    loadingElement.style.display = 'block';
+                    
+                    // Make API request
+                    fetch(`/api/matrix/${decompType}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            matrixText: matrix
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show result
+                        resultContainer.style.display = 'block';
+                        
+                        if (data.error) {
+                            resultContent.innerHTML = `<p class="error-text">${data.error}</p>`;
+                        } else {
+                            let resultHTML = '<div class="decomposition-result">';
+                            
+                            if (decompType === 'lu') {
+                                // LU decomposition
+                                resultHTML += '<h4>L Matrix:</h4>';
+                                resultHTML += createMatrixTableHTML(data.L);
+                                
+                                resultHTML += '<h4>U Matrix:</h4>';
+                                resultHTML += createMatrixTableHTML(data.U);
+                                
+                                if (data.P) {
+                                    resultHTML += '<h4>P Matrix (Permutation):</h4>';
+                                    resultHTML += createMatrixTableHTML(data.P);
+                                }
+                            } else if (decompType === 'qr') {
+                                // QR decomposition
+                                resultHTML += '<h4>Q Matrix (Orthogonal):</h4>';
+                                resultHTML += createMatrixTableHTML(data.Q);
+                                
+                                resultHTML += '<h4>R Matrix (Upper triangular):</h4>';
+                                resultHTML += createMatrixTableHTML(data.R);
+                            } else if (decompType === 'svd') {
+                                // SVD decomposition
+                                resultHTML += '<h4>U Matrix:</h4>';
+                                resultHTML += createMatrixTableHTML(data.U);
+                                
+                                resultHTML += '<h4>Σ Matrix (Diagonal with singular values):</h4>';
+                                resultHTML += createMatrixTableHTML(data.S);
+                                
+                                resultHTML += '<h4>V<sup>T</sup> Matrix:</h4>';
+                                resultHTML += createMatrixTableHTML(data.Vt);
+                            } else if (decompType === 'cholesky') {
+                                // Cholesky decomposition
+                                resultHTML += '<h4>L Matrix (Lower triangular):</h4>';
+                                resultHTML += createMatrixTableHTML(data.L);
+                                
+                                resultHTML += '<p>Note: A = L × L<sup>T</sup></p>';
+                            }
+                            
+                            resultHTML += '</div>';
+                            resultContent.innerHTML = resultHTML;
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show error
+                        resultContainer.style.display = 'block';
+                        resultContent.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
+                    });
+                }
+                
+                // Function to calculate characteristic polynomial
+                function calculateCharPoly() {
+                    const matrix = document.getElementById('char-poly-matrix').value;
+                    const loadingElement = document.getElementById('char-poly-loading');
+                    const resultContainer = document.getElementById('char-poly-result');
+                    const resultContent = document.getElementById('char-poly-result-content');
+                    
+                    if (!matrix) {
+                        alert('Please enter a matrix');
+                        return;
+                    }
+                    
+                    // Show loading
+                    loadingElement.style.display = 'block';
+                    
+                    // Make API request
+                    fetch('/api/matrix/characteristic-polynomial', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            matrixText: matrix
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show result
+                        resultContainer.style.display = 'block';
+                        
+                        if (data.error) {
+                            resultContent.innerHTML = `<p class="error-text">${data.error}</p>`;
+                        } else {
+                            let resultHTML = '<div class="char-poly-result">';
+                            
+                            resultHTML += `<p class="poly-expression">p(λ) = ${data.polynomial}</p>`;
+                            
+                            if (data.roots) {
+                                resultHTML += '<h4>Roots (Eigenvalues):</h4>';
+                                resultHTML += '<ul class="poly-roots">';
+                                data.roots.forEach(root => {
+                                    resultHTML += `<li>${
+                                        typeof root === 'object' ? 
+                                        `${root.re.toFixed(4).replace(/\.?0+$/, '')} ${root.im >= 0 ? '+' : ''}${root.im.toFixed(4).replace(/\.?0+$/, '')}i` : 
+                                        root.toFixed(4).replace(/\.?0+$/, '')
+                                    }</li>`;
+                                });
+                                resultHTML += '</ul>';
+                            }
+                            
+                            resultHTML += '</div>';
+                            resultContent.innerHTML = resultHTML;
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading
+                        loadingElement.style.display = 'none';
+                        
+                        // Show error
+                        resultContainer.style.display = 'block';
+                        resultContent.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
+                    });
+                }
+                
+                // Function to create a matrix table HTML string
+                function createMatrixTableHTML(matrix) {
+                    let tableHTML = '<table class="matrix-table">';
+                    
+                    for (let i = 0; i < matrix.length; i++) {
+                        tableHTML += '<tr>';
+                        for (let j = 0; j < matrix[i].length; j++) {
+                            const value = matrix[i][j];
+                            const formattedValue = typeof value === 'number' ? 
+                                value.toFixed(4).replace(/\.?0+$/, '') : (
+                                typeof value === 'object' && 're' in value ? 
+                                `${value.re.toFixed(4).replace(/\.?0+$/, '')} ${value.im >= 0 ? '+' : ''}${value.im.toFixed(4).replace(/\.?0+$/, '')}i` : 
+                                value);
+                            tableHTML += `<td>${formattedValue}</td>`;
+                        }
+                        tableHTML += '</tr>';
+                    }
+                    
+                    tableHTML += '</table>';
+                    return tableHTML;
+                }
+                
+                // Update clearing function to handle new fields
+                function clearInputs(prefix) {
+                    const inputIds = {
+                        'add': ['add-matrix-a', 'add-matrix-b'],
+                        'mult': ['mult-matrix-a', 'mult-matrix-b'],
+                        'det': ['det-matrix'],
+                        'inv': ['inv-matrix'],
+                        'transpose': ['transpose-matrix'],
+                        'rank': ['rank-matrix'],
+                        'dot': ['dot-vector-a', 'dot-vector-b'],
+                        'cross': ['cross-vector-a', 'cross-vector-b'],
+                        'system': ['system-coefficients', 'system-constants'],
+                        'eigen': ['eigen-matrix'],
+                        'decomp': ['decomp-matrix'],
+                        'char-poly': ['char-poly-matrix']
+                    };
+                    
+                    (inputIds[prefix] || []).forEach(id => {
+                        document.getElementById(id).value = '';
+                    });
+                    
+                    // Hide result containers
+                    const resultContainerId = prefix === 'add' ? 'add-result' : 
+                                          prefix === 'mult' ? 'multiply-result' : 
+                                          `${prefix}-result`;
+                    
+                    const resultContainer = document.getElementById(resultContainerId);
+                    if (resultContainer) {
+                        resultContainer.style.display = 'none';
+                    }
+                }
+                // Toggle dark mode
+                function toggleDarkMode() {
+                    document.body.classList.toggle('dark-mode');
+                    const icon = document.getElementById('theme-icon');
+                    if (document.body.classList.contains('dark-mode')) {
+                        icon.className = 'fas fa-sun';
+                        localStorage.setItem('darkMode', 'enabled');
+                    } else {
+                        icon.className = 'fas fa-moon';
+                        localStorage.setItem('darkMode', 'disabled');
+                    }
+                }
+            
+                // Check for saved theme preference
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (localStorage.getItem('darkMode') === 'enabled') {
+                        document.body.classList.add('dark-mode');
+                        document.getElementById('theme-icon').className = 'fas fa-sun';
+                    }
+                });
+
+            </script>    
+    </body>
+</html>
