@@ -24,11 +24,12 @@ A modern, elegant web application for performing advanced linear algebra operati
 - **Multiple solution types**: Unique, infinite, or least-squares solutions
 
 ### Design Features
-- 🎨 **Glassmorphism UI**: Beautiful transparent glass-like interface
-- 🌈 **Gradient Backgrounds**: Stunning blue-purple-indigo gradients
+- 🎨 **Glassmorphism UI**: Beautiful transparent glass-like interface with black and gray theme
+- 🌑 **Modern Dark Theme**: Elegant black to gray gradient backgrounds
 - 🔍 **Real-time Feedback**: Instant error handling and validation
 - 📱 **Responsive Design**: Works perfectly on all devices
 - ⚡ **Fast Performance**: Server-side calculations with Next.js API routes
+- 🎯 **Type Safety**: Full TypeScript implementation with strict type checking
 
 ## 🚀 Technology Stack
 
@@ -38,15 +39,8 @@ A modern, elegant web application for performing advanced linear algebra operati
 | **Language**    | TypeScript 5.7                              |
 | **UI Library**  | shadcn/ui (Radix UI primitives)            |
 | **Styling**     | Tailwind CSS with glassmorphism            |
-| **Math Engine** | mathjs                                      |
+| **Math Engine** | mathjs 14.0                                 |
 | **Icons**       | Lucide React                                |
-| **Backend**     | Python 3.8+, Flask                         |
-| **Math Engine** | NumPy, SciPy, SymPy (for symbolic math)    |
-| **UI Features** | CSS Variables, Fetch API, localStorage     |
-
-## Installation Guide
-
-### Prerequisites
 
 ## 📦 Installation
 
@@ -172,7 +166,7 @@ npm start
 
 ### Modify Glassmorphism Theme
 
-Edit `app/globals.css`:
+Edit `app/globals.css` to customize the glass effects:
 
 ```css
 .glass {
@@ -184,7 +178,16 @@ Edit `app/globals.css`:
 
 ### Change Color Scheme
 
-Edit `tailwind.config.ts` to customize colors and theme.
+Edit `tailwind.config.ts` to customize colors and theme. Current theme uses black to gray gradients for a modern, elegant look.
+
+## 🐳 Docker Deployment
+
+Build and run with Docker:
+
+```bash
+docker build -f Dockerfile.nextjs -t linear-algebra-calc .
+docker run -p 3000:3000 linear-algebra-calc
+```
 
 ## 🤝 Contributing
 
