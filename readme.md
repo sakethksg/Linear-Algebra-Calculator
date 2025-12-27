@@ -1,53 +1,45 @@
 
----
+# Linear Algebra Calculator
 
-# Linear Algebra Calculator Web Application
+A modern, elegant web application for performing advanced linear algebra operations with a beautiful glassmorphism UI.
 
-![alt text](image.png)
-![alt text](image-1.png)
+![Linear Algebra Calculator](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=for-the-badge&logo=tailwind-css)
 
-## Table of Contents
-- [Project Overview](#project-overview)
-- [Key Features](#key-features)
-- [Technology Stack](#technology-stack)
-- [Installation Guide](#installation-guide)
-- [Usage Instructions](#usage-instructions)
-- [System Architecture](#system-architecture)
-- [Development Roadmap](#development-roadmap)
-- [Contributing](#contributing)
-- [License](#license)
+## ✨ Features
 
-## Project Overview
+### Matrix Operations
+- **Basic Operations**: Addition, Multiplication, Transpose
+- **Advanced Computations**: Determinant, Inverse, Rank
+- **Eigenanalysis**: Eigenvalues & Eigenvectors
+- **Decompositions**: LU, QR decomposition
 
-The Linear Algebra Calculator is a comprehensive web application designed to perform complex linear algebra computations through an intuitive interface. This tool serves students, educators, and professionals by providing instant access to essential matrix and vector operations without requiring specialized mathematical software.
+### Vector Operations
+- **Dot Product**: For vectors of any dimension
+- **Cross Product**: For 3D vectors
 
-## Key Features
+### System Solving
+- **Linear Systems**: Solve Ax = b equations
+- **Multiple solution types**: Unique, infinite, or least-squares solutions
 
-### Core Operations
-- **Matrix Calculations**:
-  - Basic operations (addition, subtraction, multiplication)
-  - Advanced operations (determinant, inverse, transpose, rank)
-  - Matrix decompositions (LU, QR, SVD, Cholesky)
-  
-- **Vector Operations**:
-  - Dot product and cross product (3D)
-  
-- **Equation Solving**:
-  - Systems of linear equations solver
-  - Eigenvalue and eigenvector computation
-  - Characteristic polynomial calculation
+### Design Features
+- 🎨 **Glassmorphism UI**: Beautiful transparent glass-like interface
+- 🌈 **Gradient Backgrounds**: Stunning blue-purple-indigo gradients
+- 🔍 **Real-time Feedback**: Instant error handling and validation
+- 📱 **Responsive Design**: Works perfectly on all devices
+- ⚡ **Fast Performance**: Server-side calculations with Next.js API routes
 
-### User Experience
-- Responsive, themeable interface (light/dark modes)
-- Multiple input methods (form fields or text input)
-- Clean result visualization
-- Persistent user preferences (theme selection)
+## 🚀 Technology Stack
 
-## Technology Stack
-
-| Component       | Technologies Used                          |
-|-----------------|--------------------------------------------|
-| **Frontend**    | HTML5, CSS3, JavaScript (ES6+)             |
+| Component       | Technology                                  |
+|-----------------|---------------------------------------------|
+| **Framework**   | Next.js 15 (App Router)                     |
+| **Language**    | TypeScript 5.7                              |
+| **UI Library**  | shadcn/ui (Radix UI primitives)            |
+| **Styling**     | Tailwind CSS with glassmorphism            |
+| **Math Engine** | mathjs                                      |
+| **Icons**       | Lucide React                                |
 | **Backend**     | Python 3.8+, Flask                         |
 | **Math Engine** | NumPy, SciPy, SymPy (for symbolic math)    |
 | **UI Features** | CSS Variables, Fetch API, localStorage     |
@@ -55,82 +47,171 @@ The Linear Algebra Calculator is a comprehensive web application designed to per
 ## Installation Guide
 
 ### Prerequisites
-- Python 3.8 or later
-- pip package manager
+
+## 📦 Installation
+
+### Prerequisites
+- Node.js 18+ and npm/yarn/pnpm
 - Modern web browser
 
-### Setup Instructions
+### Quick Start
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/linear-algebra-calculator.git
-   cd linear-algebra-calculator
+   git clone https://github.com/sakethksg/Linear-Algebra-Calculator.git
+   cd Linear-Algebra-Calculator
    ```
 
-2. Create and activate a virtual environment:
+2. **Install dependencies**:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/MacOS
-   venv\Scripts\activate    # Windows
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
    ```
 
-3. Install dependencies:
+3. **Run the development server**:
    ```bash
-   pip install -r requirements.txt
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
    ```
 
-4. Launch the application:
-   ```bash
-   python app.py
+4. **Open your browser**:
+   ```
+   http://localhost:3000
    ```
 
-5. Access the application at:
-   ```
-   http://localhost:10000
-   ```
+## 🎯 Usage
 
-## Usage Instructions
-
-### Matrix Input Formats
-1. **Interactive Grid**:
-   - Select matrix dimensions
-   - Fill values directly in the input cells
-
-2. **Text Input**:
-   ```
-   1 2 3; 4 5 6; 7 8 9  # Represents a 3×3 matrix
-   ```
-
-### Performing Operations
-1. Enter your matrices/vectors
-2. Select the desired operation
-3. View results in the output panel
-4. Use the theme toggle to switch between light/dark modes
-
-## System Architecture
-
-```mermaid
-graph TD
-    A[User Interface] -->|HTTP Requests| B[Flask Backend]
-    B -->|NumPy/SciPy| C[Matrix Operations]
-    B -->|SymPy| D[Symbolic Computation]
-    B -->|JSON Response| A
-    A -->|localStorage| E[Theme Persistence]
+### Matrix Input Format
+Matrices are entered as text with rows separated by semicolons:
+```
+1 2 3; 4 5 6; 7 8 9
+```
+This represents:
+```
+[ 1  2  3 ]
+[ 4  5  6 ]
+[ 7  8  9 ]
 ```
 
-## Development link
+### Vector Input Format
+Vectors are space-separated values:
+```
+1 2 3 4 5
+```
 
-https://shreeyakollipara.pythonanywhere.com/
+### Available Operations
 
-### Planned Enhancements
-- [ ] Matrix visualization tools
-- [ ] Step-by-step solution explanations
-- [ ] Export capabilities (LaTeX, CSV, PNG)
-- [ ] User authentication for saving calculations
-- [ ] Mobile application version
+#### Basic Matrix Operations
+- **Addition**: Add two matrices of same dimensions
+- **Multiplication**: Multiply compatible matrices
+- **Transpose**: Flip rows and columns
+- **Determinant**: Calculate determinant of square matrices
+- **Inverse**: Find inverse of non-singular matrices
+- **Rank**: Determine matrix rank
 
-### Known Issues
-- Symbolic computation can be slow for large matrices
-- Limited complex number support
+#### Advanced Operations
+- **Eigenvalues & Eigenvectors**: Compute with complex number support
+- **System Solver**: Solve linear systems Ax = b
+
+#### Vector Operations
+- **Dot Product**: Scalar product of vectors
+- **Cross Product**: Vector product (3D only)
+
+#### Decompositions
+- **LU Decomposition**: Lower-Upper factorization
+- **QR Decomposition**: Orthogonal-triangular factorization
+
+## 🏗️ Project Structure
+
+```
+Linear-Algebra-Calculator/
+├── app/
+│   ├── api/              # Next.js API routes
+│   │   ├── matrix/       # Matrix operations endpoints
+│   │   ├── vector/       # Vector operations endpoints
+│   │   └── system/       # System solver endpoint
+│   ├── layout.tsx        # Root layout
+│   ├── page.tsx          # Main page
+│   └── globals.css       # Global styles with glassmorphism
+├── components/
+│   ├── ui/               # shadcn/ui components
+│   ├── MatrixOperation.tsx
+│   ├── VectorOperation.tsx
+│   ├── EigenCalculator.tsx
+│   ├── SystemSolver.tsx
+│   └── DecompositionCalculator.tsx
+├── lib/
+│   ├── matrix-utils.ts   # Matrix calculation utilities
+│   ├── vector-utils.ts   # Vector calculation utilities
+│   └── utils.ts          # Helper functions
+└── public/               # Static assets
+```
+
+## 🚢 Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import project in [Vercel](https://vercel.com)
+3. Deploy automatically
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+## 🎨 Customization
+
+### Modify Glassmorphism Theme
+
+Edit `app/globals.css`:
+
+```css
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+```
+
+### Change Color Scheme
+
+Edit `tailwind.config.ts` to customize colors and theme.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is open source and available under the MIT License.
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful component library
+- [mathjs](https://mathjs.org/) for mathematical operations
+- [Next.js](https://nextjs.org/) for the amazing framework
+- [Tailwind CSS](https://tailwindcss.com/) for utility-first styling
+
+## 📧 Contact
+
+Project Link: [https://github.com/sakethksg/Linear-Algebra-Calculator](https://github.com/sakethksg/Linear-Algebra-Calculator)
 
 ---
+
+**Built with ❤️ using Next.js, TypeScript, and shadcn/ui**
+
