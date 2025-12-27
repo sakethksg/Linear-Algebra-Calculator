@@ -7,24 +7,21 @@ import { EigenCalculator } from '@/components/EigenCalculator';
 import { SystemSolver } from '@/components/SystemSolver';
 import { DecompositionCalculator } from '@/components/DecompositionCalculator';
 import { Calculator, GitBranch, Grid3x3, Sigma } from 'lucide-react';
+import MatrixText from '@/components/kokonutui/matrix-text';
 
 export default function Home() {
   return (
     <main className="min-h-screen p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12 space-y-4">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 rounded-xl glass">
-              <Calculator className="w-8 h-8 text-gray-400" />
-            </div>
-          </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-gray-200 via-gray-400 to-gray-500 bg-clip-text text-transparent">
-            Linear Algebra Calculator
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Advanced mathematical operations with elegant glassmorphism UI
-          </p>
+        <div className="text-center mb-12">
+          <MatrixText 
+            text="Linear Algebra Calculator" 
+            className="min-h-0 h-auto"
+            initialDelay={100}
+            letterAnimationDuration={300}
+            letterInterval={50}
+          />
         </div>
 
         {/* Main Calculator */}
@@ -124,14 +121,6 @@ export default function Home() {
             </div>
           </TabsContent>
         </Tabs>
-
-        {/* Footer */}
-        <footer className="mt-16 text-center text-muted-foreground text-sm">
-          <div className="glass rounded-lg p-6 inline-block">
-            <p>Built with Next.js, TypeScript, shadcn/ui, and mathjs</p>
-            <p className="mt-2">Featuring elegant glassmorphism design</p>
-          </div>
-        </footer>
       </div>
     </main>
   );
